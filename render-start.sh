@@ -7,6 +7,11 @@ php artisan config:clear || true
 # Run database migrations safely
 php artisan migrate --force || true
 
+# Ensure uploads directory exists and is writable
+mkdir -p /var/www/html/public/uploads/banners
+chown -R www-data:www-data /var/www/html/public/uploads
+chmod -R 777 /var/www/html/public/uploads
+
 # Seed database with initial borders & demo data if tables are empty
 php artisan db:seed --force || true
 

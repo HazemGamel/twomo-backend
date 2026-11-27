@@ -37,11 +37,12 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Create database folder and sqlite file safely
 RUN mkdir -p /var/www/html/database && touch /var/www/html/database/database.sqlite
+RUN mkdir -p /var/www/html/public/uploads/banners
 RUN mkdir -p /var/www/html/storage/framework/views /var/www/html/storage/framework/cache /var/www/html/storage/framework/sessions /var/www/html/storage/logs /var/www/html/bootstrap/cache
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
-RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public/uploads
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public/uploads
 
 # Copy start script
 COPY render-start.sh /usr/local/bin/render-start.sh

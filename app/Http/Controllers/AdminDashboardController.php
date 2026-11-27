@@ -162,14 +162,18 @@ class AdminDashboardController extends Controller
         $imageUrl = $request->input('image_url');
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.]/', '', $file->getClientOriginalName());
-            $destinationPath = public_path('uploads/banners');
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0777, true);
+            try {
+                $file = $request->file('image');
+                $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.]/', '', $file->getClientOriginalName());
+                $destinationPath = public_path('uploads/banners');
+                if (!is_dir($destinationPath)) {
+                    @mkdir($destinationPath, 0777, true);
+                }
+                $file->move($destinationPath, $filename);
+                $imageUrl = asset('uploads/banners/' . $filename);
+            } catch (\Exception $e) {
+                return back()->with('error', 'تعذر حفظ ملف الصورة: ' . $e->getMessage());
             }
-            $file->move($destinationPath, $filename);
-            $imageUrl = url('uploads/banners/' . $filename);
         }
 
         if (empty($imageUrl)) {
@@ -222,5 +226,25 @@ class AdminDashboardController extends Controller
         $border->save();
 
         return back()->with('success', 'تم تحديث حالة المنفذ البري بنجاح.');
+    }
+
+    // Clean All Demo / Dummy Data
+    public function cleanDemoData(Request $request)
+    {
+        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+
+        // Delete dummy seeded users with placeholder numbers
+        $deletedUsers = User::where('phone', 'like', '%000 000%')
+            ->orWhere('email', 'like', '%@twomo.app%')
+            ->get();
+
+        foreach ($deletedUsers as $user) {
+            Trip::where('driver_id', $user->id)->delete();
+            Shipment::where('sender_id', $user->id)->orWhere('traveler_id', $user->id)->delete();
+            TripBooking::where('passenger_id', $user->id)->delete();
+            $user->delete();
+        }
+
+        return back()->with('success', 'تم مسح وتنظيف جميع الحسابات والرحلات الوهمية بنجاح! الآن تظهر فقط بيانات المستخدمين الحقيقيين.');
     }
 }

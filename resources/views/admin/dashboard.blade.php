@@ -11,6 +11,12 @@
             <p class="text-sm text-gray-400 mt-1">متابعة حية وفورية للمستخدمين، الرحلات، وشحنات وصّيني عبر الحدود</p>
         </div>
         <div class="flex gap-3">
+            <form action="{{ route('admin.clean.demo') }}" method="POST" onsubmit="return confirm('هل تريد مسح جميع الحسابات والبيانات الوهمية التجريبية السابقة؟')">
+                @csrf
+                <button type="submit" class="px-4 py-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/30 font-bold text-xs hover:bg-red-500/20 transition flex items-center gap-2">
+                    <i class="fa-solid fa-broom"></i> تنظيف الحسابات الوهمية
+                </button>
+            </form>
             <a href="{{ route('admin.banners') }}" class="px-4 py-2.5 rounded-xl bg-brand-green text-slate-950 font-bold text-sm hover:bg-emerald-400 transition flex items-center gap-2 shadow-lg shadow-brand-green/20">
                 <i class="fa-solid fa-plus"></i> إضافة إعلان جديد
             </a>

@@ -28,4 +28,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Borders Live Status Control
     Route::post('/borders/{id}/update', [AdminDashboardController::class, 'updateBorder'])->name('borders.update');
+
+    // Clean Demo / Dummy Data
+    Route::post('/clean-demo-data', [AdminDashboardController::class, 'cleanDemoData'])->name('clean.demo');
 });
