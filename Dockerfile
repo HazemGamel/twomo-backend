@@ -35,15 +35,17 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Install dependencies (production optimized)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Create SQLite database file if not exists
-RUN touch database/database.sqlite
+# Create database folder and sqlite file safely
+RUN mkdir -p /var/www/html/database && touch /var/www/html/database/database.sqlite
+RUN mkdir -p /var/www/html/storage/framework/views /var/www/html/storage/framework/cache /var/www/html/storage/framework/sessions /var/www/html/storage/logs /var/www/html/bootstrap/cache
 
-# Set storage and bootstrap cache permissions
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 # Copy start script
 COPY render-start.sh /usr/local/bin/render-start.sh
+RUN tr -d '\r' < /usr/local/bin/render-start.sh > /usr/local/bin/render-start-clean.sh && mv /usr/local/bin/render-start-clean.sh /usr/local/bin/render-start.sh
 RUN chmod +x /usr/local/bin/render-start.sh
 
 # Render binds to PORT env variable
