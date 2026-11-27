@@ -170,7 +170,7 @@ class AdminDashboardController extends Controller
                     @mkdir($destinationPath, 0777, true);
                 }
                 $file->move($destinationPath, $filename);
-                $imageUrl = asset('uploads/banners/' . $filename);
+                $imageUrl = 'https://twomo-api.onrender.com/uploads/banners/' . $filename;
             } catch (\Exception $e) {
                 return back()->with('error', 'تعذر حفظ ملف الصورة: ' . $e->getMessage());
             }
