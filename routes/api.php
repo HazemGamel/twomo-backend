@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ShipmentController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\BorderStatusController;
+use App\Http\Controllers\Api\BannerController;
 
 // ---------------- Public Routes ----------------
 Route::prefix('auth')->group(function () {
@@ -16,6 +17,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 });
 
+Route::get('/banners', [BannerController::class, 'index']);
 Route::get('/borders/status', [BorderStatusController::class, 'index']);
 Route::get('/shipments/track/{code}', [ShipmentController::class, 'track']);
 Route::get('/trips', [TripController::class, 'index']);
