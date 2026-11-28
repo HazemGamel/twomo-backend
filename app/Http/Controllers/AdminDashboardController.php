@@ -57,7 +57,8 @@ class AdminDashboardController extends Controller
     // Main Dashboard
     public function index(Request $request)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $usersCount = User::count();
         $ownersCount = User::where('role', 'owner')->count();
@@ -90,13 +91,14 @@ class AdminDashboardController extends Controller
     // Users List
     public function users(Request $request)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $query = User::query();
         if ($request->has('search') && $request->search != '') {
             $s = $request->search;
             $query->where('name', 'like', "%$s%")
-                  ->orWhere('phone', 'like', "%$s%");
+                ->orWhere('phone', 'like', "%$s%");
         }
         if ($request->has('role') && $request->role != '') {
             $query->where('role', $request->role);
@@ -109,7 +111,8 @@ class AdminDashboardController extends Controller
     // Toggle User Status
     public function toggleUserStatus(Request $request, $id)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $user = User::findOrFail($id);
         $user->is_verified = !$user->is_verified;
@@ -121,7 +124,8 @@ class AdminDashboardController extends Controller
     // Trips List
     public function trips(Request $request)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $trips = Trip::with('driver')->orderBy('created_at', 'desc')->paginate(15);
         return view('admin.trips', compact('trips'));
@@ -130,7 +134,8 @@ class AdminDashboardController extends Controller
     // Shipments List
     public function shipments(Request $request)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $shipments = Shipment::with(['sender', 'traveler', 'trip'])->orderBy('created_at', 'desc')->paginate(15);
         return view('admin.shipments', compact('shipments'));
@@ -139,7 +144,8 @@ class AdminDashboardController extends Controller
     // Banners & Ads List
     public function banners(Request $request)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $banners = Banner::orderBy('display_order', 'asc')->orderBy('created_at', 'desc')->get();
         return view('admin.banners', compact('banners'));
@@ -148,7 +154,8 @@ class AdminDashboardController extends Controller
     // Store Banner
     public function storeBanner(Request $request)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -195,7 +202,8 @@ class AdminDashboardController extends Controller
     // Toggle Banner
     public function toggleBanner(Request $request, $id)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $banner = Banner::findOrFail($id);
         $banner->is_active = !$banner->is_active;
@@ -207,7 +215,8 @@ class AdminDashboardController extends Controller
     // Delete Banner
     public function deleteBanner(Request $request, $id)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $banner = Banner::findOrFail($id);
         $banner->delete();
@@ -218,7 +227,8 @@ class AdminDashboardController extends Controller
     // Update Border Status
     public function updateBorder(Request $request, $id)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         $border = BorderStatus::findOrFail($id);
         $border->status_ar = $request->input('status_ar', $border->status_ar);
@@ -231,7 +241,8 @@ class AdminDashboardController extends Controller
     // Clean All Demo / Dummy Data
     public function cleanDemoData(Request $request)
     {
-        if (!$this->checkAuth($request)) return redirect()->route('admin.login');
+        if (!$this->checkAuth($request))
+            return redirect()->route('admin.login');
 
         // Delete dummy seeded users with placeholder numbers
         $deletedUsers = User::where('phone', 'like', '%000 000%')
